@@ -184,10 +184,10 @@ function train(train_data, valid_data)
    end         
    
    -- prototypes for gradients so there is no need to clone
-   local encoder_grad_proto = torch.zeros(valid_data.batch_l:max(), opt.max_sent_l, opt.rnn_size)
-   local encoder_grad_proto2 = torch.zeros(valid_data.batch_l:max(), opt.max_sent_l, opt.rnn_size)
-   context_proto = torch.zeros(valid_data.batch_l:max(), opt.max_sent_l, opt.rnn_size)
-   context_proto2 = torch.zeros(valid_data.batch_l:max(), opt.max_sent_l, opt.rnn_size)
+   local encoder_grad_proto = torch.zeros(train_data.batch_l:max(), opt.max_sent_l, opt.rnn_size)
+   local encoder_grad_proto2 = torch.zeros(train_data.batch_l:max(), opt.max_sent_l, opt.rnn_size)
+   context_proto = torch.zeros(train_data.batch_l:max(), opt.max_sent_l, opt.rnn_size)
+   context_proto2 = torch.zeros(train_data.batch_l:max(), opt.max_sent_l, opt.rnn_size)
    
    -- clone encoder/decoder up to max source/target length   
    decoder_clones = clone_many_times(decoder, opt.max_sent_l)
@@ -203,8 +203,8 @@ function train(train_data, valid_data)
       end
    end   
 
-   local h_init_dec = torch.zeros(valid_data.batch_l:max(), opt.rnn_size)
-   local h_init_enc = torch.zeros(valid_data.batch_l:max(), opt.rnn_size)      
+   local h_init_dec = torch.zeros(train_data.batch_l:max(), opt.rnn_size)
+   local h_init_enc = torch.zeros(train_data.batch_l:max(), opt.rnn_size)
    if opt.gpuid >= 0 then
       h_init_enc = h_init_enc:cuda()      
       h_init_dec = h_init_dec:cuda()
@@ -306,7 +306,7 @@ function train(train_data, valid_data)
 	 end
          local target, target_out, nonzeros, source = d[1], d[2], d[3], d[4]
 	 local batch_l, target_l, source_l = d[5], d[6], d[7]
-	 
+
 	 local encoder_grads = encoder_grad_proto[{{1, batch_l}, {1, source_l}}]
 
 	 local rnn_state_enc = reset_state(init_fwd_enc, batch_l, 0)

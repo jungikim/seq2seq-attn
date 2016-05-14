@@ -274,7 +274,7 @@ def get_data(args):
     src_indexer.write(args.outputfile + ".src.dict")
     target_indexer.write(args.outputfile + ".targ.dict")
     if args.chars == 1:
-        char_indexer.prune_vocab(200)
+        char_indexer.prune_vocab(10000)
         char_indexer.write(args.outputfile + ".char.dict")
         print("Character vocab size: {}".format(len(char_indexer.pruned_vocab)))
     
